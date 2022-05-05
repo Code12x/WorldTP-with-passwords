@@ -19,6 +19,9 @@ public final class WorldTP extends JavaPlugin {
         // data.yml
         References.loadData(this);
 
+        // passwords.yml
+        References.loadPasswords(this);
+
         // Register Events
         registerEvents();
 
