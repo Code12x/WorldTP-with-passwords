@@ -14,6 +14,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
 
 import java.util.List;
 
@@ -94,16 +96,34 @@ public class InventoryListener implements Listener {
                                 event.setCancelled(true);
                                 break;
                             }
-
-                            if (locationToTP != null) {
-                                player.teleport(locationToTP);
-                            } else {
-                                World world = Bukkit.getWorld(menuGroup);
-                                player.teleport(world.getSpawnLocation());
-                                if (player.getBedSpawnLocation() != null) {
-                                    player.teleport(player.getBedSpawnLocation());
-                                }
+                            
+                            if(locationToTP == null) {
+                            	World world = Bukkit.getWorld(menuGroup);
+                            	player.teleport(world.getSpawnLocation());
+                            	if (player.getBedSpawnLocation() != null) {
+                            		player.teleport(player.getBedSpawnLocation());
+                            	}
                             }
+                            
+                            event.getView().close();
+                            
+                            boolean locked = false;
+                            
+                            if(data.getConfig().getString("menuGroupID." + menuGroup + ".password") != null) {
+                            	locked = true;
+                            }
+                                                        
+                            if(locked) {
+                            	data.getConfig().set(player.getName() + ".nextChatMessageIsPassword", true);
+                            	
+                            	data.getConfig().set(player.getName() + ".locationIfApproved", locationToTP);
+                            	
+                            	player.sendMessage(ChatColor.YELLOW + "Enter the password into chat. NOTE: The password will not be displayed in the chat.");
+                            	
+                            	break;
+                            }
+
+                            player.teleport(locationToTP);
                         }
 
 
@@ -208,4 +228,9 @@ public class InventoryListener implements Listener {
         item.setItemMeta(itemMeta);
         return item;
     }
+    
+    private boolean authenticatePlayer(String enteredPassword) {
+    	return false;
+    }
+    
 }

@@ -58,12 +58,4 @@ public final class WorldTP extends JavaPlugin {
         pm.registerEvents(new InventoryListener(this), this);
         pm.registerEvents(new PlayerJoinListener(this), this);
     }
-
-    private void loadConfig() {
-        References.config = new ConfigManager(this);
-    }
-
-    private void loadData() {
-        References.data = new DataManager(this);
-    }
 }
