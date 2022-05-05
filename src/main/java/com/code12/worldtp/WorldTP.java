@@ -5,6 +5,7 @@ import com.code12.worldtp.files.ConfigManager;
 import com.code12.worldtp.files.DataManager;
 import com.code12.worldtp.files.References;
 import com.code12.worldtp.listeners.InventoryListener;
+import com.code12.worldtp.listeners.PlayerChatListener;
 import com.code12.worldtp.listeners.PlayerJoinListener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -57,5 +58,6 @@ public final class WorldTP extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new InventoryListener(this), this);
         pm.registerEvents(new PlayerJoinListener(this), this);
+        pm.registerEvents(new PlayerChatListener(), this);
     }
 }

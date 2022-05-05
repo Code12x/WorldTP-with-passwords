@@ -14,9 +14,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-
 import java.util.List;
 
 public class InventoryListener implements Listener {
@@ -99,14 +96,14 @@ public class InventoryListener implements Listener {
                             
                             if(locationToTP == null) {
                             	World world = Bukkit.getWorld(menuGroup);
-                            	player.teleport(world.getSpawnLocation());
+                            	locationToTP = world.getSpawnLocation();
+                            	if (data.getConfig().getLocation("menuGroupID." + menuGroup + ".WorldTPWorldSpawnPoint") != null)
+                                    locationToTP = data.getConfig().getLocation("menuGroupID." + menuGroup + ".WorldTPWorldSpawnPoint");
                             	if (player.getBedSpawnLocation() != null) {
-                            		player.teleport(player.getBedSpawnLocation());
+                            		locationToTP = player.getBedSpawnLocation();
                             	}
                             }
-                            
-                            event.getView().close();
-                            
+                                                        
                             boolean locked = false;
                             
                             if(data.getConfig().getString("menuGroupID." + menuGroup + ".password") != null) {
@@ -132,6 +129,8 @@ public class InventoryListener implements Listener {
                         player.sendMessage(ChatColor.DARK_AQUA + "You have been teleported to " + menuGroup + ".");
                         data.saveConfig();
                         event.setCancelled(true);
+                        
+                        break;
                     }
                 }
             }
@@ -196,24 +195,41 @@ public class InventoryListener implements Listener {
                             }
                         }
 
-                        if (locationToTP != null) {
-                            player.teleport(locationToTP);
-                        } else{
-                            World world = Bukkit.getWorld(menuGroup);
-                            Location spawn = world.getSpawnLocation();
-                            if (data.getConfig().getLocation("menuGroupID." + menuGroup + ".WorldTPWorldSpawnPoint") != null)
-                                spawn = data.getConfig().getLocation("menuGroupID." + menuGroup + ".WorldTPWorldSpawnPoint");
-                            player.teleport(spawn);
-                            if (player.getBedSpawnLocation() != null) {
-                                player.teleport(player.getBedSpawnLocation());
-                            }
+                        if(locationToTP == null) {
+                        	World world = Bukkit.getWorld(menuGroup);
+                        	locationToTP = world.getSpawnLocation();
+                        	if (data.getConfig().getLocation("menuGroupID." + menuGroup + ".WorldTPWorldSpawnPoint") != null)
+                                locationToTP = data.getConfig().getLocation("menuGroupID." + menuGroup + ".WorldTPWorldSpawnPoint");
+                        	if (player.getBedSpawnLocation() != null) {
+                        		locationToTP = player.getBedSpawnLocation();
+                        	}
                         }
+                                                    
+                        boolean locked = false;
+                        
+                        if(data.getConfig().getString("menuGroupID." + menuGroup + ".password") != null) {
+                        	locked = true;
+                        }
+                                                    
+                        if(locked) {
+                        	data.getConfig().set(player.getName() + ".nextChatMessageIsPassword", true);
+                        	
+                        	data.getConfig().set(player.getName() + ".locationIfApproved", locationToTP);
+                        	
+                        	player.sendMessage(ChatColor.YELLOW + "Enter the password into chat. NOTE: The password will not be displayed in the chat.");
+                        	
+                        	break;
+                        }
+
+                        player.teleport(locationToTP);
 
                         data.getConfig().set("playerLocations." + player.getName() + "." + worldGroupToLeave, playerLocation);
 
                         player.sendMessage(ChatColor.DARK_AQUA + "You have been teleported to " + menuGroup + ".");
                         data.saveConfig();
                         event.setCancelled(true);
+                        
+                        break;
                     }
                 }
             }
@@ -227,10 +243,5 @@ public class InventoryListener implements Listener {
         itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         item.setItemMeta(itemMeta);
         return item;
-    }
-    
-    private boolean authenticatePlayer(String enteredPassword) {
-    	return false;
-    }
-    
+    }    
 }
