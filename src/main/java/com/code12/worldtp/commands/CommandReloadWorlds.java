@@ -60,36 +60,20 @@ public class CommandReloadWorlds implements CommandExecutor {
 
         //gets the menuGroupList and registers them with WorldTPWorldGroup.registerWorldGroup()
         for(String worldGroup : menuGroupList){
-            // Display item
             ItemStack item = new ItemStack(Material.GRASS_BLOCK);
-
+            String displayName = worldGroup;
             if(data.getConfig().getItemStack("menuGroupID." + worldGroup + ".item") != null){
                 item = data.getConfig().getItemStack("menuGroupID." + worldGroup + ".item");
             }
-
-            // Display name
-            String displayName = worldGroup;
-
             if(data.getConfig().getString("menuGroupID." + worldGroup + ".displayName") != null){
                 displayName = data.getConfig().getString("menuGroupID." + worldGroup + ".displayName");
             }
-
-            // Admin only
             Boolean adminOnly = data.getConfig().getBoolean("menuGroupID." + worldGroup + ".admin");
-
-            // Password
-            String password = data.getConfig().getString("menuGroupID." + worldGroup + ".password");
-
-            // Initialize the WorldTPWorldGroup
             WorldTPWorldGroup worldTPWorldGroup = new WorldTPWorldGroup(plugin, worldGroup, displayName);
-
-            // Set the attributes
             worldTPWorldGroup.setItem(item);
             worldTPWorldGroup.setAdminOnly(adminOnly);
-            worldTPWorldGroup.setPassword(password);
-
-            // Register the world group
             worldTPWorldGroup.registerWorldGroup();
+            data.saveConfig();
 
             setConfig(worldGroup);
 
