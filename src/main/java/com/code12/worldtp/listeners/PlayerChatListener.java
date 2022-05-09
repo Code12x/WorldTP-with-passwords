@@ -39,11 +39,7 @@ public class PlayerChatListener implements Listener {
 			String passwordGuess = event.getMessage();
 
 			if(passwordGuess.equals(password)) {
-				player.sendMessage("HI");
-
 				Location locationToTP =  data.getConfig().getLocation(player.getName() + ".locationIfApproved");
-
-				player.sendMessage(locationToTP.toString());
 
 				new BukkitRunnable() {
 					@Override
@@ -56,8 +52,6 @@ public class PlayerChatListener implements Listener {
 			}else {
 				player.sendMessage(ChatColor.RED + passwordGuess + " is incorrect");
 			}
-			
-
 		}
 	}
 }
