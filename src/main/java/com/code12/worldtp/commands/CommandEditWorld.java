@@ -63,7 +63,7 @@ public class CommandEditWorld implements CommandExecutor {
             }
 
             // Get the password if applicable
-            if(!args[4].isEmpty()){
+            if(args.length == 5){
                 String password = args[4];
                 worldToRegister.setPassword(password);
             }
