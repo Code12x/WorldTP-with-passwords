@@ -42,6 +42,7 @@ public class CommandSpawn implements CommandExecutor {
         String worldGroup = world.getWorldGroup();
 
         if(!config.getConfig().getBoolean(worldGroup + ".Spawn_Teleporting")){
+            player.sendMessage(ChatColor.YELLOW + "Spawn teleporting is not enabled in this world.");
             return true;
         }
 
