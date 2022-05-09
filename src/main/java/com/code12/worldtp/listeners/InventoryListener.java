@@ -116,9 +116,14 @@ public class InventoryListener implements Listener {
                             	data.getConfig().set(player.getName() + ".locationIfApproved", locationToTP);
                             	
                             	data.getConfig().set(player.getName() + ".menuGroup", menuGroup);
+
+                                data.saveConfig();
                             	
                             	player.sendMessage(ChatColor.YELLOW + "Enter the password into chat. NOTE: The password will not be displayed in the chat.");
-                            	
+
+                                event.setCancelled(true);
+                                player.closeInventory();
+
                             	break;
                             }
 
@@ -219,9 +224,14 @@ public class InventoryListener implements Listener {
                         	data.getConfig().set(player.getName() + ".locationIfApproved", locationToTP);
                         	
                         	data.getConfig().set(player.getName() + ".menuGroup", menuGroup);
-                        	
-                        	player.sendMessage(ChatColor.YELLOW + "Enter the password into chat. NOTE: The password will not be displayed in the chat.");
-                        	
+
+                            data.saveConfig();
+
+                            player.sendMessage(ChatColor.YELLOW + "Enter the password into chat. NOTE: The password will not be displayed in the chat.");
+
+                            event.setCancelled(true);
+                            player.closeInventory();
+
                         	break;
                         }
 

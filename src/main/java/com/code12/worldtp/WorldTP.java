@@ -20,9 +20,6 @@ public final class WorldTP extends JavaPlugin {
         // data.yml
         References.loadData(this);
 
-        // passwords.yml
-        References.loadPasswords(this);
-
         // Register Events
         registerEvents();
 
@@ -58,6 +55,6 @@ public final class WorldTP extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new InventoryListener(this), this);
         pm.registerEvents(new PlayerJoinListener(this), this);
-        pm.registerEvents(new PlayerChatListener(), this);
+        pm.registerEvents(new PlayerChatListener(this), this);
     }
 }
