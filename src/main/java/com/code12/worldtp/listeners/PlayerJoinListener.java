@@ -22,5 +22,6 @@ public class PlayerJoinListener implements Listener {
         if(data.getConfig().getLocation("lobby") != null){
             event.getPlayer().teleport(data.getConfig().getLocation("lobby"));
         }
+        data.getConfig().set(event.getPlayer().getName() + ".nextChatMessageIsPassword", false);
     }
 }

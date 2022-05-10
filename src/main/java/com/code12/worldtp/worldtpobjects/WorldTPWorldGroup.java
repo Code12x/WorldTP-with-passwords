@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class WorldTPWorldGroup {
-    //Variables
     WorldTP plugin;
     public DataManager data = References.data;
 
@@ -19,11 +18,10 @@ public class WorldTPWorldGroup {
     private String displayName;
     private ItemStack item = new ItemStack(Material.GRASS_BLOCK);
     private Boolean adminOnly = false;
-
+    private String password = null;
 
     public WorldTPWorldGroup(WorldTP plugin, String name, String displayName){
         this.plugin = plugin;
-
         this.name = name;
         this.displayName = displayName;
     }
@@ -36,19 +34,33 @@ public class WorldTPWorldGroup {
         this.adminOnly = adminOnly;
     }
 
+    public void setPassword(String password){
+        this.password = password;
+    }
+
     public void registerWorldGroup(){
         //register the world in the "worldList" List in WorldTP data.yml
         List<String> worldList = data.getConfig().getStringList("menuGroupList");
         worldList.add(name);
         data.getConfig().set("menuGroupList", worldList);
 
-        //add the name to "menuGroupID"
+        // Set the display name
         data.getConfig().set("menuGroupID." + name + ".displayName", displayName);
+
+        // Set the display item
         data.getConfig().set("menuGroupID." + name + ".item", item);
 
-        //set the admin-only variable for the world
+        // Set the admin-only variable for the world
         data.getConfig().set("menuGroupID." + name + ".admin", adminOnly);
 
+        // Set the password
+        if(password != null){
+            data.getConfig().set("menuGroupID." + name + ".password", password);
+        }else{
+            data.getConfig().set("menuGroupID." + name + ".password", null);
+        }
+
+        // Save the registry
         data.saveConfig();
     }
 
@@ -71,10 +83,7 @@ public class WorldTPWorldGroup {
         //remove the world from "menuGroupID" in WorldTP config.yml
         data.getConfig().set("menuGroupID." + name, null);
 
-        //remove the player locations for the world group
-
-
-        //remove the registered world in the "menuGroupList" List in WorldTP config.yml
+        //remove the registered world in the "menuGroupList" List in WorldTP data.yml
         List<String> worldList = data.getConfig().getStringList("menuGroupList");
         worldList.remove(name);
         data.getConfig().set("menuGroupList", worldList);
@@ -88,13 +97,23 @@ public class WorldTPWorldGroup {
     }
 
     public void editWorldGroup(){
-        //add the name to "menuGroupID" in WorldTP config.yml
+        // Edit the display name
         data.getConfig().set("menuGroupID." + name + ".displayName", displayName);
+
+        // Edit the display item
         data.getConfig().set("menuGroupID." + name + ".item", item);
 
-        //set the admin-only variable for the world
+        // Edit the admin-only attribute
         data.getConfig().set("menuGroupID." + name + ".admin", adminOnly);
 
+        // Edit the password
+        if(password != null){
+            data.getConfig().set("menuGroupID." + name + ".password", password);
+        }else{
+            data.getConfig().set("menuGroupID." + name + ".password", null);
+        }
+
+        // Save the edit
         data.saveConfig();
     }
 

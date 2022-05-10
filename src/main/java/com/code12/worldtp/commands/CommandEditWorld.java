@@ -41,12 +41,26 @@ public class CommandEditWorld implements CommandExecutor {
             if(adminOnly.equalsIgnoreCase("true")){
                 worldToRegister.setAdminOnly(true);
             }
+
+            // Get the password if applicable
+            if(args.length == 5){
+                String password = args[4];
+                worldToRegister.setPassword(password);
+            }
+
+            // Register the edit
             worldToRegister.editWorldGroup();
 
             sender.sendMessage(ChatColor.RED + "" + ChatColor.BOLD + "[!]" + ChatColor.RESET + ChatColor.YELLOW + "Registration of world " + world + " has been completed!");
         }else{
             // in case the sender didn't enter the correct number of arguments or if there were any other errors
-            sender.sendMessage("This command requires 4 arguments. The first argument is the name of the world to register. The second argument is the display name for the world. The third argument is the material to be displayed in the GUI (this material must be in the spigot Material format | not \"minecraft.iron_sword\", but rather \"iron_sword\". The fourth argument is a true/false value | true allows only admins to enter the world, but false allows anyone to enter the world.");
+            sender.sendMessage("This command requires 5 arguments.\nThe first argument is the name of the world to" +
+                    " register.\nThe second argument is the display name for the world.\nThe third argument is the" +
+                    " material to be displayed in the GUI (this material must be in the spigot Material format. Not" +
+                    " \"minecraft.iron_sword\", but rather \"iron_sword\".\nThe fourth argument is a true/false value" +
+                    " | true allows only admins to enter the world, but false allows anyone to enter the world." +
+                    "\nThe fifth argument is the password to set for that world. If nothing is entered, the world will" +
+                    " not be locked and will act like normal.");
             sender.sendMessage(ChatColor.YELLOW + "Worlds:\n" + ChatColor.RESET +  data.getConfig().getStringList("menuGroupList"));
             return true;
         }
